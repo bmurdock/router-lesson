@@ -21,6 +21,17 @@ router.use((req, res, next) => {
     next();
 });
 
+router.param('id', (req, res, next, id) => {
+    const index = parseInt(id);
+    if (isNaN(index) || index > people.length) {
+        res.send('Invalid person index.');
+        return;
+    }
+    const person = people[index];
+    req.person = person;
+    next();
+});
+
 
 // These are the actual routes
 router.get('/', (req, res, next) => {
@@ -34,10 +45,7 @@ router.get('/pages', (req, res, next) => {
 });
 
 router.get('/person/:id', (req, res, next) => {
-    console.log('params:', req.params);
-    const person = people[Number(req.params.id)];
-    console.log(person);
-    res.json(person);
+    res.json(req.person);
 });
 
 module.exports = router;

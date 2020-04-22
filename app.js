@@ -18,12 +18,37 @@ const logger = (req, res, next) => {
 app.use(logger);
 
 app.use(express.json());
+app.use(express.static('public'));
+
+// Define the view engine
+app.set('view engine', 'ejs');
 
 // Routing information goes here
 app.use('/people', peopleRouter);
 
-app.get('/', (req, res, next) => {
-    res.send('You made it.');
+app.get('/pug', (req, res, next) => {
+    res.render('index', {
+        title: 'Hello!',
+        message: 'Whatever message I want.'
+    });
+});
+
+app.get('/test', (req, res, next) => {
+    res.render('index', {
+        title: 'Different',
+        message: 'Some other message'
+    });
+})
+
+app.get('/about', (req, res, next) => {
+    res.render('about', {
+        message: "This is my message",
+        stats: {
+            score: 1,
+            avg: 3
+        },
+        point: "This should be bold!"
+    });
 })
 
 // Tell the application to start listening for requests
